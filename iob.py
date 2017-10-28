@@ -3,8 +3,9 @@
 # 2017-09-19 - modified by JE Boyd for python3
 
 import os
-import pygame
 import random
+
+import pygame
 from pygame.locals import *
 
 from joystick import Joystick
@@ -41,7 +42,6 @@ def save_highscore(score):
 
 class Ship(pygame.sprite.Sprite):
     def __init__(self):
-
         pygame.sprite.Sprite.__init__(self, self.containers)
         self.image = self.images[0]
         self.rect = self.image.get_rect(center=(240, 520))
@@ -57,24 +57,8 @@ class Ship(pygame.sprite.Sprite):
         self.js = Joystick.get_instance()
 
     def update(self):
-        key = pygame.key.get_pressed()
-        #        if key[K_LEFT]:
-        x_val = self.js.x_axis()
-        if x_val > 2.7:
-            self.rect.move_ip(-5, 0)
-            #        if key[K_RIGHT]:
-        if x_val < 2.2:
-            self.rect.move_ip(5, 0)
+        self.rect.move_ip((5 * self.js.x_axis()), 0)
 
-            '''
-            TODO: reimplement general case?
-            x_val = self.js.x_axis()
-            print(x_val)
-            if x_val < 0:
-            self.rect.move_ip((-5 * x_val), 0)
-            else:
-            self.rect.move_ip((5 * x_val), 0)
-            '''
         self.reload_timer += 1
         if self.js.button_pressed() and not self.overheated:
             self.heat += 0.75
@@ -105,11 +89,12 @@ class Ship(pygame.sprite.Sprite):
         self.image = self.images[self.frame // 2 % 2]
         self.rect.clamp_ip(WORLD)
 
-    def kill(self):
-        pygame.sprite.Sprite.kill(self)
-        self.die_sound.play()
-        for i in range(15):
-            Particle(self.rect.center)
+
+def kill(self):
+    pygame.sprite.Sprite.kill(self)
+    self.die_sound.play()
+    for i in range(15):
+        Particle(self.rect.center)
 
 
 class Shot(pygame.sprite.Sprite):
@@ -332,7 +317,7 @@ def formation7(num=3):
         Blob((360 + i * 16, -i * 32), 4)
 
 
-def playLevels(game):
+def play_levels(game):
     level = game.level
     if not game.blobs:
         game.level += 0.1
@@ -399,7 +384,7 @@ class Game:
         self.highscore = load_highscore()
         self.gamewon = False
 
-    def pauseLoop(self):
+    def pause_loop(self):
 
         while self.paused:
             for e in pygame.event.get():
@@ -412,7 +397,7 @@ class Game:
                     if e.key == K_p:
                         self.paused ^= 1
 
-    def menuLoop(self):
+    def menu_loop(self):
 
         option = 1
         js = Joystick.get_instance()
@@ -444,7 +429,7 @@ class Game:
             # select menu option
             if js.button_pressed():
                 if option == 1:
-                    self.gameLoop()
+                    self.game_loop()
                 if option == 2:
                     pygame.quit()
                     return
@@ -486,7 +471,7 @@ class Game:
                 self.screen.blit(ren, (240 - ren.get_width() // 2, 400))
             pygame.display.flip()
 
-    def gameLoop(self):
+    def game_loop(self):
 
         self.paused = False
         self.level = 1
@@ -495,14 +480,14 @@ class Game:
         self.gamewon = False
         for s in self.all.sprites():
             pygame.sprite.Sprite.kill(s)
-        playLevels(self)
+        play_levels(self)
         self.highscore = load_highscore()
 
         while 1:
             self.clock.tick(60)
             self.all.update()
             self.bg.update()
-            self.pauseLoop()
+            self.pause_loop()
 
             for e in pygame.event.get():
                 if e.type == QUIT:
@@ -548,7 +533,7 @@ class Game:
             if not self.boss.alive() and self.level >= 6:
                 self.gamewon = True
             if not self.boss.alive() and not self.gamewon:
-                playLevels(self)
+                play_levels(self)
                 # if not random.randrange(120):
                 # Asteroid()
 
@@ -593,7 +578,7 @@ class Game:
 def run():
     pygame.init()
     game = Game()
-    game.menuLoop()
+    game.menu_loop()
 
 
 if __name__ == "__main__":

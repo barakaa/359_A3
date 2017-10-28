@@ -13,20 +13,18 @@ class Joystick:
     def button_pressed(self):
         return explorerhat.input.one.read() == 1
 
-    def x_axis(self):
-        return round(explorerhat.analog.one.read(), 1)
+    def translate_range(self, value, old_min, old_max, new_min, new_max):
+        old_range = old_max - old_min
+        if old_range == 0:
+            new_value = new_min
+        else:
+            new_range = new_max - new_min
+            new_value = (((value - old_min) * new_range) / old_range) + new_min
+        return new_value
 
-    '''                                                                            TODO: reimplement general case? 
-    NOTE: negate it as Riike said
-    def translate_range(self, value, left_min, left_max, right_min, right_max):
-    left_span = left_max - left_min
-    right_span = right_max - right_min
-    value_scaled = float(value - left_min) / float(left_span)
-    return right_min + (value_scaled + right_span)
     def x_axis(self):
         one_val = explorerhat.analog.one.read()
-        return self.translate_range(one_val, 5, 0, 1, -1)
-    '''
+        return -round(self.translate_range(one_val, 0, 5, -1, 1), 3)
 
     def y_axis(self):
         return round(explorerhat.analog.two.read(), 1)
