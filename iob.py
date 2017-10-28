@@ -54,13 +54,12 @@ class Ship(pygame.sprite.Sprite):
         self.poweredup = False
         self.powertimer = 0
         self.frame = 0
-        self.js = Joystick.get_instance()
 
     def update(self):
-        self.rect.move_ip((5 * self.js.x_axis()), 0)
+        self.rect.move_ip((5 * Joystick.x_axis()), 0)
 
         self.reload_timer += 1
-        if self.js.button_pressed() and not self.overheated:
+        if Joystick.button_pressed() and not self.overheated:
             self.heat += 0.75
             if self.reload_timer >= self.reload_time:
                 self.reload_timer = 0
@@ -89,12 +88,11 @@ class Ship(pygame.sprite.Sprite):
         self.image = self.images[self.frame // 2 % 2]
         self.rect.clamp_ip(WORLD)
 
-
-def kill(self):
-    pygame.sprite.Sprite.kill(self)
-    self.die_sound.play()
-    for i in range(15):
-        Particle(self.rect.center)
+    def kill(self):
+        pygame.sprite.Sprite.kill(self)
+        self.die_sound.play()
+        for i in range(15):
+            Particle(self.rect.center)
 
 
 class Shot(pygame.sprite.Sprite):
@@ -318,7 +316,6 @@ def formation7(num=3):
 
 
 def play_levels(game):
-    level = game.level
     if not game.blobs:
         game.level += 0.1
         lvl = game.level
@@ -400,7 +397,6 @@ class Game:
     def menu_loop(self):
 
         option = 1
-        js = Joystick.get_instance()
 
         pygame.mixer.music.load(os.path.join("data", "loop.ogg"))
         pygame.mixer.music.play(-1)
@@ -421,33 +417,17 @@ class Game:
                     if e.key == K_p:
                         self.paused ^= 1
             # move up/down on menu
-            y_val = js.y_axis()
-            if y_val < 2.2:
+            if Joystick.up():
                 option = 1
-            elif y_val > 2.7:
+            elif Joystick.down():
                 option = 2
             # select menu option
-            if js.button_pressed():
+            if Joystick.button_pressed():
                 if option == 1:
                     self.game_loop()
                 if option == 2:
                     pygame.quit()
                     return
-
-                '''
-                    if e.key == K_p:
-                        self.paused ^= 1
-                    if e.key == K_DOWN:
-                        option = 2
-                    if e.key == K_UP:
-                        option = 1
-                    if e.key == K_RETURN:
-                        if option == 1:
-                            self.gameLoop()
-                        if option == 2:
-                            pygame.quit()
-                            return
-            '''
 
             self.screen.fill((0, 0, 0))
             self.bg.draw(self.screen)
