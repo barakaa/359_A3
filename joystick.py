@@ -1,43 +1,37 @@
 import explorerhat
 
+from controller import *
 
-class Joystick:
-    @staticmethod
-    def button_pressed():
+
+class Joystick(Controller):
+    def __init__(self):
+        super(Joystick, self).__init__()
+        self.low_volt, self.high_volt = 0, 5
+        self.mid_volt = round((self.high_volt - self.low_volt) / 2, 3)
+        self.set_dead_zone(self.low_volt, self.high_volt, 0.2)
+
+    def action1(self):
         return explorerhat.input.one.read() == 1
 
-    @staticmethod
-    def translate_range(value, old_min, old_max, new_min, new_max):
-        old_range = old_max - old_min
-        if old_range == 0:
-            new_value = new_min
-        else:
-            new_range = new_max - new_min
-            new_value = (((value - old_min) * new_range) / old_range) + new_min
-        return new_value
-
-    @staticmethod
-    def x_axis():
+    def x_axis(self):
         one_val = explorerhat.analog.one.read()
-        return -round(Joystick.translate_range(one_val, 0, 5, -1, 1), 3)
+        return -self.format_axis(one_val, self.low_volt, self.high_volt)
 
-    @staticmethod
-    def y_axis():
+    def y_axis(self):
         two_val = explorerhat.analog.two.read()
-        return -round(Joystick.translate_range(two_val, 0, 5, -1, 1), 3)
+        return -self.format_axis(two_val, self.low_volt, self.high_volt)
 
-    @staticmethod
-    def left():
-        return explorerhat.analog.one.read() > 2.7
+    def z_axis(self):
+        return Controller.RANGE_MID
 
-    @staticmethod
-    def right():
-        return explorerhat.analog.one.read() < 2.2
+    def left(self):
+        return explorerhat.analog.one.read() > (self.mid_volt + self.dead_zone)
 
-    @staticmethod
-    def up():
-        return explorerhat.analog.two.read() < 2.2
+    def right(self):
+        return explorerhat.analog.one.read() < (self.mid_volt - self.dead_zone)
 
-    @staticmethod
-    def down():
-        return explorerhat.analog.two.read() > 2.7
+    def up(self):
+        return explorerhat.analog.two.read() < (self.mid_volt - self.dead_zone)
+
+    def down(self):
+        return explorerhat.analog.two.read() > (self.mid_volt + self.dead_zone)

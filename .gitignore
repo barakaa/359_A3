@@ -1,4 +1,6 @@
+.gitignore
 .idea
-data
 LICENSE.txt
 README.txt
+__pycache__
+data
