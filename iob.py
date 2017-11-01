@@ -8,10 +8,14 @@ import random
 import pygame
 from pygame.locals import *
 
+from accelerometer import Accelerometer
 from joystick import Joystick
 
 random.seed()
 WORLD = Rect(0, 0, 480, 550)
+joystick = Joystick()
+accelerometer = Accelerometer()
+accelerometer.begin()
 
 
 def load_image(filename):
@@ -56,10 +60,10 @@ class Ship(pygame.sprite.Sprite):
         self.frame = 0
 
     def update(self):
-        self.rect.move_ip((5 * Joystick.x_axis()), 0)
+        self.rect.move_ip((5 * accelerometer.x_axis()), 0)
 
         self.reload_timer += 1
-        if Joystick.button_pressed() and not self.overheated:
+        if accelerometer.action1() and not self.overheated:
             self.heat += 0.75
             if self.reload_timer >= self.reload_time:
                 self.reload_timer = 0
@@ -417,12 +421,12 @@ class Game:
                     if e.key == K_p:
                         self.paused ^= 1
             # move up/down on menu
-            if Joystick.up():
+            if accelerometer.up():
                 option = 1
-            elif Joystick.down():
+            elif accelerometer.down():
                 option = 2
             # select menu option
-            if Joystick.button_pressed():
+            if accelerometer.action1():
                 if option == 1:
                     self.game_loop()
                 if option == 2:

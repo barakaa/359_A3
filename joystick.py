@@ -14,12 +14,10 @@ class Joystick(Controller):
         return explorerhat.input.one.read() == 1
 
     def x_axis(self):
-        one_val = explorerhat.analog.one.read()
-        return -self.format_axis(one_val, self.low_volt, self.high_volt)
+        return -self.format_axis(explorerhat.analog.one.read(), self.low_volt, self.high_volt)
 
     def y_axis(self):
-        two_val = explorerhat.analog.two.read()
-        return -self.format_axis(two_val, self.low_volt, self.high_volt)
+        return -self.format_axis(explorerhat.analog.two.read(), self.low_volt, self.high_volt)
 
     def z_axis(self):
         return Controller.RANGE_MID

@@ -36,28 +36,6 @@ class ADXL345:
     ADXL345_REG_FIFO_STATUS = 0x39  # FIFO status
     ADXL345_MG2G_MULTIPLIER = 0.004
 
-    ADXL345_DATARATE_3200_HZ = 0b1111  # 1600Hz Bandwidth   140µA IDD
-    ADXL345_DATARATE_1600_HZ = 0b1110  # 800Hz Bandwidth    90µA IDD
-    ADXL345_DATARATE_800_HZ = 0b1101  # 400Hz Bandwidth   140µA IDD
-    ADXL345_DATARATE_400_HZ = 0b1100  # 200Hz Bandwidth   140µA IDD
-    ADXL345_DATARATE_200_HZ = 0b1011  # 100Hz Bandwidth   140µA IDD
-    ADXL345_DATARATE_100_HZ = 0b1010  # 50Hz Bandwidth   140µA IDD
-    ADXL345_DATARATE_50_HZ = 0b1001  # 25Hz Bandwidth    90µA IDD
-    ADXL345_DATARATE_25_HZ = 0b1000  # 12.5Hz Bandwidth    60µA IDD
-    ADXL345_DATARATE_12_5_HZ = 0b0111  # 6.25Hz Bandwidth    50µA IDD
-    ADXL345_DATARATE_6_25HZ = 0b0110  # 3.13Hz Bandwidth    45µA IDD
-    ADXL345_DATARATE_3_13_HZ = 0b0101  # 1.56Hz Bandwidth    40µA IDD
-    ADXL345_DATARATE_1_56_HZ = 0b0100  # 0.78Hz Bandwidth    34µA IDD
-    ADXL345_DATARATE_0_78_HZ = 0b0011  # 0.39Hz Bandwidth    23µA IDD
-    ADXL345_DATARATE_0_39_HZ = 0b0010  # 0.20Hz Bandwidth    23µA IDD
-    ADXL345_DATARATE_0_20_HZ = 0b0001  # 0.10Hz Bandwidth    23µA IDD
-    ADXL345_DATARATE_0_10_HZ = 0b0000  # 0.05Hz Bandwidth    23µA IDD (default value)
-
-    ADXL345_RANGE_16_G = 0b11  # +/- 16g
-    ADXL345_RANGE_8_G = 0b10  # +/- 8g
-    ADXL345_RANGE_4_G = 0b01  # +/- 4g
-    ADXL345_RANGE_2_G = 0b00  # +/- 2g (default value)
-
     GRAVITY = float(9.80665)
 
     def __init__(self):
@@ -75,26 +53,6 @@ class ADXL345:
         # enable measurements
         self.write_register(self.ADXL345_REG_POWER_CTL, 0x08)
         return True
-
-    def set_range(self, range_val):
-        range_format = self.read_register(self.ADXL345_REG_DATA_FORMAT)
-        range_format &= ~0x0F
-        range_format |= range_val
-
-        range_format |= 0x08
-
-        self.write_register(self.ADXL345_REG_DATA_FORMAT, range_format)
-
-        self.range = range_val
-
-    def get_range(self):
-        return self.read_register(self.ADXL345_REG_DATA_FORMAT) & 0x03
-
-    def set_data_rate(self, data_rate):
-        self.write_register(self.ADXL345_REG_BW_RATE, data_rate)
-
-    def get_data_rate(self):
-        return self.read_register(self.ADXL345_REG_BW_RATE) & 0x0F
 
     #######################################################
 
