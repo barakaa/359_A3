@@ -8,12 +8,12 @@ import random
 import pygame
 from pygame.locals import *
 
-from accelerometer import Accelerometer
+from accelerometer import *
 from joystick import Joystick
 
 random.seed()
 WORLD = Rect(0, 0, 480, 550)
-joystick = Joystick()
+# joystick = Joystick()
 accelerometer = Accelerometer()
 accelerometer.begin()
 
@@ -395,8 +395,13 @@ class Game:
                 if e.type == KEYDOWN:
                     if e.key == K_ESCAPE:
                         self.paused ^= 1
-                    if e.key == K_p:
-                        self.paused ^= 1
+                    #if e.key == K_p:
+                    #    self.paused ^= 1
+
+            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
+                self.paused = 1
+            else:
+                self.paused = 0
 
     def menu_loop(self):
 
@@ -418,8 +423,14 @@ class Game:
                     if e.key == K_ESCAPE:
                         pygame.quit()
                         return
-                    if e.key == K_p:
-                        self.paused ^= 1
+                        # if e.key == K_p:
+                        #   self.paused ^= 1
+
+            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
+                self.paused = 1
+            else:
+                self.paused = 0
+
             # move up/down on menu
             if accelerometer.up():
                 option = 1
@@ -480,8 +491,14 @@ class Game:
                 if e.type == KEYDOWN:
                     if e.key == K_ESCAPE:
                         return
-                    if e.key == K_p:
-                        self.paused ^= 1
+                        # if e.key == K_p:
+                        #    self.paused ^= 1
+
+            print(accelerometer.z_axis())
+            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
+                self.paused = 1
+            else:
+                self.paused = 0
 
             if not random.randrange(1000) and not self.ship.poweredup and not self.powerups and not self.gamewon:
                 Powerup()

@@ -6,9 +6,10 @@ class Controller(object):
     RANGE_LOWER = -1
     RANGE_MID = 0
     RANGE_UPPER = 1
+    DEAD_ZONE = 0
 
     def __init__(self):
-        self.dead_zone = 0
+        Controller.dead_zone = 0
 
     def twos_comp(self, val, bits=16):
         if (val & (1 << (bits - 1))) != 0:
@@ -40,8 +41,13 @@ class Controller(object):
             return round(
                 self.translate_range(val, bound, u_bound, Controller.RANGE_LOWER, Controller.RANGE_UPPER), 3)
 
-    def set_dead_zone(self, lower=RANGE_LOWER, upper=RANGE_UPPER, dead_zone_percent=0.15):
-        self.dead_zone = ((upper - lower) / 2) * dead_zone_percent
+    @staticmethod
+    def get_dead_zone():
+        return Controller.DEAD_ZONE
+
+    @staticmethod
+    def set_dead_zone(lower=RANGE_LOWER, upper=RANGE_UPPER, dead_zone_percent=0.15):
+        Controller.DEAD_ZONE = ((upper - lower) / 2) * dead_zone_percent
 
     @abc.abstractmethod
     def action1(self):

@@ -8,7 +8,7 @@ class Joystick(Controller):
         super(Joystick, self).__init__()
         self.low_volt, self.high_volt = 0, 5
         self.mid_volt = round((self.high_volt - self.low_volt) / 2, 3)
-        self.set_dead_zone(self.low_volt, self.high_volt, 0.2)
+        Controller.set_dead_zone(self.low_volt, self.high_volt, 0.2)
 
     def action1(self):
         return explorerhat.input.one.read() == 1
@@ -23,13 +23,13 @@ class Joystick(Controller):
         return Controller.RANGE_MID
 
     def left(self):
-        return explorerhat.analog.one.read() > (self.mid_volt + self.dead_zone)
+        return explorerhat.analog.one.read() > (self.mid_volt + Controller.dead_zone)
 
     def right(self):
-        return explorerhat.analog.one.read() < (self.mid_volt - self.dead_zone)
+        return explorerhat.analog.one.read() < (self.mid_volt - Controller.dead_zone)
 
     def up(self):
-        return explorerhat.analog.two.read() < (self.mid_volt - self.dead_zone)
+        return explorerhat.analog.two.read() < (self.mid_volt - Controller.dead_zone)
 
     def down(self):
-        return explorerhat.analog.two.read() > (self.mid_volt + self.dead_zone)
+        return explorerhat.analog.two.read() > (self.mid_volt + Controller.dead_zone)
