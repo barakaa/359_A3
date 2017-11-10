@@ -14,7 +14,7 @@ class Accelerometer(Controller):
         if not self.adxl.begin():  # start ADXL345
             raise RuntimeError("No ADXL345 detected")
 
-    def action1(self):
+    def click(self):
         return False
 
     def x_axis(self):
@@ -38,11 +38,12 @@ class Accelerometer(Controller):
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
 
     def up(self):
-        print('up')
         return self.y_axis() < -(Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
 
     def down(self):
-        print('down')
         return self.y_axis() > (Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
+
+    def upside_down(self):
+        return self.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone())

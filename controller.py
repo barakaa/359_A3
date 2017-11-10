@@ -50,7 +50,7 @@ class Controller(object):
         Controller.DEAD_ZONE = ((upper - lower) / 2) * dead_zone_percent
 
     @abc.abstractmethod
-    def action1(self):
+    def click(self):
         raise NotImplementedError("Controller subclass must implement action1()")
 
     @abc.abstractmethod

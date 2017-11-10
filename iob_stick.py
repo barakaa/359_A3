@@ -8,13 +8,11 @@ import random
 import pygame
 from pygame.locals import *
 
-from accelerometer import *
+from joystick import *
 
 random.seed()
 WORLD = Rect(0, 0, 480, 550)
-# joystick = Joystick()
-accelerometer = Accelerometer()
-accelerometer.begin()
+joystick = Joystick()
 
 
 def load_image(filename):
@@ -59,10 +57,10 @@ class Ship(pygame.sprite.Sprite):
         self.frame = 0
 
     def update(self):
-        self.rect.move_ip((5 * accelerometer.x_axis()), 0)
+        self.rect.move_ip((5 * joystick.x_axis()), 0)
 
         self.reload_timer += 1
-        if accelerometer.up() and not self.overheated:
+        if joystick.click() and not self.overheated:
             self.heat += 0.75
             if self.reload_timer >= self.reload_time:
                 self.reload_timer = 0
@@ -387,19 +385,10 @@ class Game:
     def pause_loop(self):
 
         while self.paused:
-            for e in pygame.event.get():
-                if e.type == QUIT:
-                    pygame.quit()
-                    return
-                if e.type == KEYDOWN:
-                    if e.key == K_ESCAPE:
-                        self.paused ^= 1
-                    #if e.key == K_p:
-                    #    self.paused ^= 1
-
-            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
-                self.paused = 1
-            else:
+            if joystick.down():
+                pygame.quit()
+                return
+            if joystick.click():
                 self.paused = 0
 
     def menu_loop(self):
@@ -414,29 +403,18 @@ class Game:
             self.bg.update()
             self.clock.tick(60)
 
-            for e in pygame.event.get():
-                if e.type == QUIT:
-                    pygame.quit()
-                    return
-                if e.type == KEYDOWN:
-                    if e.key == K_ESCAPE:
-                        pygame.quit()
-                        return
-                        # if e.key == K_p:
-                        #   self.paused ^= 1
-
-            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
+            '''if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
                 self.paused = 1
             else:
-                self.paused = 0
+                self.paused = 0'''
 
             # move up/down on menu
-            if accelerometer.up():
+            if joystick.up():
                 option = 1
-            elif accelerometer.down():
+            elif joystick.down():
                 option = 2
             # select menu option
-            if accelerometer.right():
+            if joystick.actoin1():
                 if option == 1:
                     self.game_loop()
                 if option == 2:
@@ -483,20 +461,12 @@ class Game:
             self.bg.update()
             self.pause_loop()
 
-            for e in pygame.event.get():
-                if e.type == QUIT:
-                    pygame.quit()
-                    return
-                if e.type == KEYDOWN:
-                    if e.key == K_ESCAPE:
-                        return
-                        # if e.key == K_p:
-                        #    self.paused ^= 1
+            if joystick.upside_down():
+                pygame.quit()
+                return
 
-            if accelerometer.down():
+            if joystick.click():
                 self.paused = 1
-            else:
-                self.paused = 0
 
             if not random.randrange(1000) and not self.ship.poweredup and not self.powerups and not self.gamewon:
                 Powerup()

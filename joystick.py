@@ -10,7 +10,7 @@ class Joystick(Controller):
         self.mid_volt = round((self.high_volt - self.low_volt) / 2, 3)
         Controller.set_dead_zone(self.low_volt, self.high_volt, 0.2)
 
-    def action1(self):
+    def click(self):
         return explorerhat.input.one.read() == 1
 
     def x_axis(self):
