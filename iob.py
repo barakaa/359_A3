@@ -9,7 +9,6 @@ import pygame
 from pygame.locals import *
 
 from accelerometer import *
-from joystick import Joystick
 
 random.seed()
 WORLD = Rect(0, 0, 480, 550)
@@ -63,7 +62,7 @@ class Ship(pygame.sprite.Sprite):
         self.rect.move_ip((5 * accelerometer.x_axis()), 0)
 
         self.reload_timer += 1
-        if accelerometer.action1() and not self.overheated:
+        if accelerometer.up() and not self.overheated:
             self.heat += 0.75
             if self.reload_timer >= self.reload_time:
                 self.reload_timer = 0
@@ -437,7 +436,7 @@ class Game:
             elif accelerometer.down():
                 option = 2
             # select menu option
-            if accelerometer.action1():
+            if accelerometer.right():
                 if option == 1:
                     self.game_loop()
                 if option == 2:
@@ -494,8 +493,7 @@ class Game:
                         # if e.key == K_p:
                         #    self.paused ^= 1
 
-            print(accelerometer.z_axis())
-            if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
+            if accelerometer.down():
                 self.paused = 1
             else:
                 self.paused = 0

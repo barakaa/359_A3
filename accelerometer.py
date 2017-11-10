@@ -1,6 +1,5 @@
 from ADXL345 import *
 from controller import *
-from time import sleep
 
 
 class Accelerometer(Controller):
@@ -16,27 +15,7 @@ class Accelerometer(Controller):
             raise RuntimeError("No ADXL345 detected")
 
     def action1(self):
-        '''
-        z_vals = []
-        pos, neg = False, False
-        for i in range(0, 100):
-            z_vals.append(self.twos_comp(self.adxl.get_z()))
-        # print(z_vals)
-
-        for val in z_vals:
-            if val < 0:
-                neg = True
-            elif val > 0:
-                pos = True
-        print('p: ', pos, ' n: ', neg)
-
-        return pos and neg
-        '''
-
-        z_tap_val = self.adxl.tap_z()
-        # print (z_tap_val)
-        # return True
-        raise NotImplementedError("Accelerometer.action1()")
+        return False
 
     def x_axis(self):
         x_val = self.twos_comp(self.adxl.get_x())
@@ -50,19 +29,20 @@ class Accelerometer(Controller):
         z_val = self.twos_comp(self.adxl.get_z())
         return self.format_axis(z_val, self.adxl_range)
 
-    def left(self):
+    def right(self):
         return self.x_axis() > (Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
 
-    def right(self):
+    def left(self):
         return self.x_axis() < -(Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
 
     def up(self):
+        print('up')
         return self.y_axis() < -(Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
 
     def down(self):
+        print('down')
         return self.y_axis() > (Controller.RANGE_MID + Controller.get_dead_zone()) and \
                self.z_axis() < (Controller.RANGE_UPPER - Controller.get_dead_zone())
-

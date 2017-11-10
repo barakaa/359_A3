@@ -1,5 +1,6 @@
 import smbus
 
+
 class ADXL345:
     ADXL345_ADDRESS = 0x53  # Assumes ALT address pin low
 
@@ -51,11 +52,6 @@ class ADXL345:
             return False
         # enable measurements
         self.write_register(self.ADXL345_REG_POWER_CTL, 0x08)
-
-        self.write_register(self.ADXL345_REG_THRESH_TAP, 0b01000000)  # 0x20 = 32 = 2g
-        self.write_register(self.ADXL345_REG_DUR, 0b00110000)  # 0x20 = 32 = 32ms
-        self.write_register(self.ADXL345_REG_TAP_AXES, 0b00000111) # enable tap on X/Y/Z axes
-
         return True
 
     #######################################################
@@ -90,7 +86,3 @@ class ADXL345:
 
     def get_z(self):
         return self.read_16(self.ADXL345_REG_DATAZ0)
-
-    def tap_z(self):
-        val = self.read_register(self.ADXL345_REG_INT_SOURCE)
-        print(format(val, '08b'))
