@@ -60,7 +60,7 @@ class Ship(pygame.sprite.Sprite):
         self.rect.move_ip((5 * joystick.x_axis()), 0)
 
         self.reload_timer += 1
-        if joystick.click() and not self.overheated:
+        if joystick.up() and not self.overheated:
             self.heat += 0.75
             if self.reload_timer >= self.reload_time:
                 self.reload_timer = 0
@@ -388,7 +388,7 @@ class Game:
             if joystick.down():
                 pygame.quit()
                 return
-            if joystick.click():
+            if joystick.up():
                 self.paused = 0
 
     def menu_loop(self):
@@ -403,18 +403,13 @@ class Game:
             self.bg.update()
             self.clock.tick(60)
 
-            '''if accelerometer.z_axis() < (Controller.RANGE_MID - Controller.get_dead_zone()):
-                self.paused = 1
-            else:
-                self.paused = 0'''
-
             # move up/down on menu
             if joystick.up():
                 option = 1
             elif joystick.down():
                 option = 2
             # select menu option
-            if joystick.actoin1():
+            if joystick.right():
                 if option == 1:
                     self.game_loop()
                 if option == 2:
@@ -450,8 +445,8 @@ class Game:
         self.score = 0
         self.lives = 5
         self.gamewon = False
-        for s in self.all.sprites():
-            pygame.sprite.Sprite.kill(s)
+        for sprite in self.all.sprites():
+            pygame.sprite.Sprite.kill(sprite)
         play_levels(self)
         self.highscore = load_highscore()
 
@@ -461,7 +456,7 @@ class Game:
             self.bg.update()
             self.pause_loop()
 
-            if joystick.upside_down():
+            if joystick.down():
                 pygame.quit()
                 return
 
@@ -530,8 +525,8 @@ class Game:
                 ren = self.font.render("Cooling gun...", 1, (0, 255, 0))
                 self.screen.blit(ren, (240 - ren.get_width() // 2, 275 - ren.get_height() // 2))
             if self.gamewon:
-                for s in self.blobs:
-                    pygame.sprite.Sprite.kill(s)
+                for sprite in self.blobs:
+                    pygame.sprite.Sprite.kill(sprite)
                 pygame.sprite.Sprite.kill(self.ship)
                 ren = self.bigfont.render("Congratulations!", 1, (0, 255, 0))
                 self.screen.blit(ren, (240 - ren.get_width() // 2, 275 - ren.get_height() // 2))
