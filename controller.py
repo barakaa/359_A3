@@ -11,11 +11,6 @@ class Controller(object):
     def __init__(self):
         Controller.dead_zone = 0
 
-    def twos_comp(self, val, bits=16):
-        if (val & (1 << (bits - 1))) != 0:
-            val = val - (1 << bits)
-        return val
-
     def translate_range(self, value, old_min, old_max, new_min, new_max):
         old_range = old_max - old_min
         if old_range == 0:

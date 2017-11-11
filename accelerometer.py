@@ -14,6 +14,10 @@ class Accelerometer(Controller):
         if not self.adxl.begin():  # start ADXL345
             raise RuntimeError("No ADXL345 detected")
 
+    def twos_comp(self, val):
+        val = ((val + 0x00008000) & 0x0000FFFF) - 0x00008000
+        return val
+
     def click(self):
         return False
 
