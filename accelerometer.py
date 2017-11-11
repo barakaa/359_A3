@@ -7,7 +7,7 @@ class Accelerometer(Controller):
         super(Accelerometer, self).__init__()
         self.adxl = None
         self.adxl_range = 256  # value output from ADXL345 accel sensors +/-256 2scomp
-        Controller.set_dead_zone()
+        Controller.set_dead_zone(Controller.RANGE_LOWER, Controller.RANGE_UPPER, 0.2)
 
     def begin(self):
         self.adxl = ADXL345()

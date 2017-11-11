@@ -1,0 +1,35 @@
+Cotnrols for Invasion of the Blobs made by:
+Omar Abdelwahab
+Baraka Amadala
+Riike Oyesoro
+
+Invasion of the Blobs with joystick:
+
+Position the joystick so that the arrow with Y is facing forward.
+
+In the main menu:
+Move the joystick up or down depending on what you want to do.
+To make a selection move the joystick to the right.
+
+In the game:
+Move the joystick to the right to move the ship to the right
+Move the joystick to the left to move the ship to the left.
+Move the joystick up to fire.
+To pause the game click the joystick button.
+To quit the game move the joystick down.
+
+****************************************************************
+
+Invation of the blobs with accelerometer:
+
+Position the accelerometer so that the arrow with the Y is facing forward.
+
+In the main menu:
+Tilt the accelerometer forward or backward to choose a menu item.
+To make a selection tilt the accelerometer to the right.
+
+In game:
+To move right or left tilt the accelerometer in the respective manner.
+To fire tilt the device forward.
+To pause the game tilt backward.
+To quit the game put the accelerometer upside down.
